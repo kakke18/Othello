@@ -1,12 +1,12 @@
 othello
 ===
-ネットワーク対戦型オセロ
+Network opponent type Othello
 
-## 説明
-大学の授業の一貫として行った．
+## Description
+It is developed as part of the university lesson.
 
-## 開発言語
+## Language
 Java
 
-## 作成者
+## Author
 [kakke18](https://github.com//kakke18)
