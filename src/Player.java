@@ -1,74 +1,74 @@
 
 
 public class Player {
-	private String name = ""; //ƒ†[ƒU–¼
-	private String passWord = "";  //ƒpƒXƒ[ƒh
-	private int win = 0; //Ÿ‚¿
-	private int defeat = 0; //•‰‚¯
-	private int draw = 0; //ˆø•ª‚¯
-	private int surrender = 0; //“Š—¹
-	private int disconnect = 0;//Ø’f
-	private int exp = 0; //ŒoŒ±’l
-	private int level = 0; //ƒŒƒxƒ‹
-	private int total = 0; //‘‡”
-	private int winPersentage = 0; //Ÿ—¦
-	private boolean color = true; //F
-	private int historyNum = 0; //—š—ğ”
-	private String historyStr = ""; //‘Î‹Ç—š—ğ•¶š—ñ
-	private String[] history; //‘Î‹Ç—š—ğ
-	private String gameResult = ""; //‡Œ‹‰Ê
-	private int stone = 0; //Î‚Ì”
+	private String name = ""; //ãƒ¦ãƒ¼ã‚¶å
+	private String passWord = "";  //ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
+	private int win = 0; //å‹ã¡
+	private int defeat = 0; //è² ã‘
+	private int draw = 0; //å¼•åˆ†ã‘
+	private int surrender = 0; //æŠ•äº†
+	private int disconnect = 0;//åˆ‡æ–­
+	private int exp = 0; //çµŒé¨“å€¤
+	private int level = 0; //ãƒ¬ãƒ™ãƒ«
+	private int total = 0; //ç·è©¦åˆæ•°
+	private int winPersentage = 0; //å‹ç‡
+	private boolean color = true; //è‰²
+	private int historyNum = 0; //å±¥æ­´æ•°
+	private String historyStr = ""; //å¯¾å±€å±¥æ­´æ–‡å­—åˆ—
+	private String[] history; //å¯¾å±€å±¥æ­´
+	private String gameResult = ""; //è©¦åˆçµæœ
+	private int stone = 0; //çŸ³ã®æ•°
 
-	//ˆø”‚È‚µƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//å¼•æ•°ãªã—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	Player(){
 		this.name = "";
 	}
 
-	//ˆø”‚ ‚èƒRƒ“ƒXƒgƒ‰ƒNƒ^(ƒ†[ƒUî•ñ‚©‚çŠe—v‘f‚ÉƒZƒbƒg)
+	//å¼•æ•°ã‚ã‚Šã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿(ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã‹ã‚‰å„è¦ç´ ã«ã‚»ãƒƒãƒˆ)
 	Player(String userInfo){
-		setResult(userInfo); //¬Ñ‚ğƒZƒbƒg
-		historyStr = getStrHistory(userInfo); //‘Î‹Ç—š—ğ•¶š—ñæ“¾
+		setResult(userInfo); //æˆç¸¾ã‚’ã‚»ãƒƒãƒˆ
+		historyStr = getStrHistory(userInfo); //å¯¾å±€å±¥æ­´æ–‡å­—åˆ—å–å¾—
 		if(!historyStr.equals("")) {
-			historyNum = getHistoryNum(historyStr); //—š—ğ”æ“¾
-			history = new String[historyNum]; //”z—ñ‚ğéŒ¾
+			historyNum = getHistoryNum(historyStr); //å±¥æ­´æ•°å–å¾—
+			history = new String[historyNum]; //é…åˆ—ã‚’å®£è¨€
 			for(int i = 0; i < historyNum; i++) {
 				history[i] = getHistory(historyStr, i);
 			}
 		}
 	}
 
-	//•\¦
+	//è¡¨ç¤º
 	public void display() {
 		System.out.println(name);
 		System.out.println(passWord);
-		System.out.println("Ÿ:" + String.valueOf(win));
-		System.out.println("•‰:" + String.valueOf(defeat));
-		System.out.println("ˆø:" + String.valueOf(draw));
-		System.out.println("“Š:" + String.valueOf(surrender));
-		System.out.println("Ø:" + String.valueOf(disconnect));
-		System.out.println("Œo:" + String.valueOf(exp));
-		System.out.println("ƒŒ:" + String.valueOf(level));
-		System.out.println("‘:" + String.valueOf(total));
-		System.out.println("—¦:" + String.valueOf(winPersentage));
+		System.out.println("å‹:" + String.valueOf(win));
+		System.out.println("è² :" + String.valueOf(defeat));
+		System.out.println("å¼•:" + String.valueOf(draw));
+		System.out.println("æŠ•:" + String.valueOf(surrender));
+		System.out.println("åˆ‡:" + String.valueOf(disconnect));
+		System.out.println("çµŒ:" + String.valueOf(exp));
+		System.out.println("ãƒ¬:" + String.valueOf(level));
+		System.out.println("ç·:" + String.valueOf(total));
+		System.out.println("ç‡:" + String.valueOf(winPersentage));
 		for(int i = 0; i < historyNum; i++) {
-			System.out.println("—ğF" + history[i]);
+			System.out.println("æ­´ï¼š" + history[i]);
 		}
 
 	}
 
-	//ƒ†[ƒU–¼CƒŒƒxƒ‹CŸ—¦
+	//ãƒ¦ãƒ¼ã‚¶åï¼Œãƒ¬ãƒ™ãƒ«ï¼Œå‹ç‡
 	Player(String name, String exp, String winPersentage){
 		this.name = name;
 		culcLevel(Integer.parseInt(exp));
 		this.winPersentage = Integer.parseInt(winPersentage);
 	}
 
-	//Zo
-	//‘‡
+	//ç®—å‡º
+	//ç·è©¦åˆ
 	public void culcTotal() {
 		total = win + defeat + draw + surrender;
 	}
-	//Ÿ—¦
+	//å‹ç‡
 	public void culcWinPersentage() {
 		if(total == 0) {
 			winPersentage = 0;
@@ -104,7 +104,7 @@ public class Player {
 		}
 	}
 
-	//ƒ†[ƒUî•ñ‚©‚ç–¼‘OC¬Ñ‚ğƒZƒbƒg
+	//ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã‹ã‚‰åå‰ï¼Œæˆç¸¾ã‚’ã‚»ãƒƒãƒˆ
 	public void setResult(String userInfo) {
 		String[] data;
 		data = userInfo.split(",");
@@ -120,47 +120,47 @@ public class Player {
 		culcLevel(exp);
 	}
 
-	//¬Ñ‚ğƒQƒbƒg
-	//‘,Ÿ,•‰,ˆø,“Š,Ø
+	//æˆç¸¾ã‚’ã‚²ãƒƒãƒˆ
+	//ç·,å‹,è² ,å¼•,æŠ•,åˆ‡
 	public String getResult() {
 		String space = "  ";
 		String result = String.valueOf(total) + space +  String.valueOf(win) + space + String.valueOf(defeat) + space +  String.valueOf(draw) + space +  String.valueOf(surrender);
 		return result;
 	}
 
-	//ƒ†[ƒUî•ñ‚©‚ç‘Î‹Ç—š—ğ•¶š—ñ‚ğæ“¾
+	//ãƒ¦ãƒ¼ã‚¶æƒ…å ±ã‹ã‚‰å¯¾å±€å±¥æ­´æ–‡å­—åˆ—ã‚’å–å¾—
 	public String getStrHistory(String userInfo) {
 		String[] data = userInfo.split(",", 9);
 		return data[8];
 	}
 
-	//‘Î‹Ç‹L˜^•¶š—ñ‚©‚ç‘Î‹Ç—š—ğ”‚ğæ“¾
+	//å¯¾å±€è¨˜éŒ²æ–‡å­—åˆ—ã‹ã‚‰å¯¾å±€å±¥æ­´æ•°ã‚’å–å¾—
 	public int getHistoryNum(String history) {
 		String[] data = history.split(",");
 		return data.length / 2;
 	}
 
-	//”š‚©‚çŒ‹‰Ê‚ğ•Ô‚·
+	//æ•°å­—ã‹ã‚‰çµæœã‚’è¿”ã™
 	public String getRes(String num) {
 		String res = "";
 
 		if(num.equals("1")) {
-			res = "Ÿ";
+			res = "å‹";
 		}
 		else if(num.equals("2")) {
-			res = "•‰";
+			res = "è² ";
 		}
 		else if(num.equals("3")) {
-			res = "ˆø";
+			res = "å¼•";
 		}
 		else if(num.equals("4")) {
-			res = "“Š";
+			res = "æŠ•";
 		}
 
 		return res;
 	}
 
-	//‘Î‹Ç—š—ğ•¶š—ñ‚©‚ç(num+1)”Ô–Ú‚Ì‘Î‹Ç—š—ğ‚ğæ“¾
+	//å¯¾å±€å±¥æ­´æ–‡å­—åˆ—ã‹ã‚‰(num+1)ç•ªç›®ã®å¯¾å±€å±¥æ­´ã‚’å–å¾—
 	public String getHistory(String history, int num) {
 		String[] data = history.split(",");
 		int index = num * 2;
@@ -168,8 +168,8 @@ public class Player {
 	}
 
 
-	//ƒZƒbƒ^[CƒQƒbƒ^[ƒƒ\ƒbƒh
-	//“Gî•ñ
+	//ã‚»ãƒƒã‚¿ãƒ¼ï¼Œã‚²ãƒƒã‚¿ãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+	//æ•µæƒ…å ±
 	public void setOpponent(String opInfo) {
 		String[] data = opInfo.split(",");
 		name = data[0];
@@ -181,7 +181,7 @@ public class Player {
 		return name + "  " + String.valueOf(level) + "  " + String.valueOf(winPersentage);
 	}
 
-	//ƒ†[ƒU–¼
+	//ãƒ¦ãƒ¼ã‚¶å
 	public String getName() {
 		return name;
 	}
@@ -189,7 +189,7 @@ public class Player {
 		this.name = name;
 	}
 
-	//ƒpƒXƒ[ƒh
+	//ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 	public String getPassWord() {
 		return passWord;
 	}
@@ -197,54 +197,54 @@ public class Player {
 		this.passWord = passWord;
 	}
 
-	//Ÿ‚¿
+	//å‹ã¡
 	public int getWin() {
 		return win;
 	}
 
-	//•‰‚¯
+	//è² ã‘
 	public int getDefeat() {
 		return defeat;
 	}
 
-	//ˆø•ª‚¯
+	//å¼•åˆ†ã‘
 	public int getDraw() {
 		return draw;
 	}
 
-	//“Š—¹
+	//æŠ•äº†
 	public int getSurrender() {
 		return surrender;
 	}
 
 
-	//ŒoŒ±’l
+	//çµŒé¨“å€¤
 	public int getExp() {
 		return exp;
 	}
 	public int culcAddExp(String result, int opLevel) {
-		int addExp = 0; //’Ç‰ÁŒoŒ±’l
-		int diff = 0; //ƒŒƒxƒ‹·
+		int addExp = 0; //è¿½åŠ çµŒé¨“å€¤
+		int diff = 0; //ãƒ¬ãƒ™ãƒ«å·®
 
 		diff = opLevel - level;
 
-		//Ÿ‚¿
+		//å‹ã¡
 		if(result.equals("1")) {
-			//Ÿ‚Á‚½‚ç10
+			//å‹ã£ãŸã‚‰10
 			addExp = 10;
-			//‘ŠèƒŒƒxƒ‹‚ª‚‚¢
+			//ç›¸æ‰‹ãƒ¬ãƒ™ãƒ«ãŒé«˜ã„
 			if(diff > 0) {
 				addExp += diff * 2;
 			}
 		}
-		//•‰‚¯C“Š—¹
+		//è² ã‘ï¼ŒæŠ•äº†
 		else if(result.equals("2") || result.equals("4")) {
-			//•‰‚¯‚½‚ç1
+			//è² ã‘ãŸã‚‰1
 			addExp = 1;
 		}
-		//ˆø•ª‚¯
+		//å¼•åˆ†ã‘
 		else if(result.equals("3")) {
-			//ˆø•ª‚¯‚Í3
+			//å¼•åˆ†ã‘ã¯3
 			addExp = 3;
 		}
 
@@ -255,12 +255,12 @@ public class Player {
 		exp += culcAddExp(result, opLevel);
 	}
 
-	//‘‡
+	//ç·è©¦åˆ
 	public int getTotal() {
 		return total;
 	}
 
-	//Ÿ—¦
+	//å‹ç‡
 	public double getWinPersentage() {
 		return winPersentage;
 	}
@@ -268,7 +268,7 @@ public class Player {
 		this.winPersentage = winPersentage;
 	}
 
-	//ƒŒƒxƒ‹
+	//ãƒ¬ãƒ™ãƒ«
 	public int getLevel() {
 		return level;
 	}
@@ -276,7 +276,7 @@ public class Player {
 		this.level = level;
 	}
 
-	//F
+	//è‰²
 	public boolean getColor() {
 		return color;
 	}
@@ -292,7 +292,7 @@ public class Player {
 		}
 	}
 
-	//‡Œ‹‰Ê
+	//è©¦åˆçµæœ
 	public String getGameResult() {
 		return gameResult;
 	}
@@ -300,7 +300,7 @@ public class Player {
 		this.gameResult = gameResult;
 	}
 
-	//Î‚Ì”
+	//çŸ³ã®æ•°
 	public int getStone() {
 		return stone;
 	}

@@ -1,5 +1,3 @@
-﻿
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -51,23 +49,6 @@ public class Server{
         date = new Date[100];
 
         sta = new Status();
-
-
-        //テスト用
-       /* player[50] = "testuser1";
-        player[51] = "testuser2";
-        player[52] = "testuser3";
-
-        online[50] = 2;
-        online[51] = 2;
-        online[52] = 2;
-        online[53] = 2;
-
-        playerNoMap.put("testuser1", 50);
-        playerNoMap.put("testuser2", 51);
-        playerNoMap.put("testuser3", 52);
-     */
-
     }
     //実験
 
@@ -154,11 +135,6 @@ public class Server{
                 br = new BufferedReader(sisr);
                 online[playerNo] = 0;//初期状態
                 shut = new Shut(playerNo,this);
-                //online[playerNo] = 3;//初期状態
-                //match[1] = 2;
-                //match[2] = 1;
-               // shut = new Shut(playerNo);
-
             } catch (IOException e) {
                 System.err.println("データ受信中にエラーが発生しました: " + e);
             }
@@ -167,144 +143,120 @@ public class Server{
         public void run(){
 
         	shut.start();
-
-
-
-        		try{
-        			while(true) {// データを受信し続ける
-        			String inputLine = br.readLine();//データを一行ぶん読み込む
-        			if (inputLine != null){ //データを受信したら
-        				receiveMessage(inputLine,playerNo);
-        			}
-        			}
-        		} catch(IOException e) {//そのほかのエラー
-        			e.printStackTrace();
-        			System.err.println(player[playerNo] + "との接続でエラーが発生しました");
-                    //online[playerNo] = 0; //プレイヤの接続状態を更新する
-                    //player[playerNo] = null;
-        			printStatus(); //接続状態を出力する
-        			//receiver[playerNo].start();//どうなることやら
-        		} catch(Exception e) {
-        			e.printStackTrace();
-        			System.err.println(player[playerNo] + "との接続でエラーが発生しました");
-        			printStatus(); //接続状態を出力する
-        			playerShut(playerNo);
-        		}
+			try{
+				while(true) {// データを受信し続ける
+					String inputLine = br.readLine();//データを一行ぶん読み込む
+					if (inputLine != null){ //データを受信したら
+						receiveMessage(inputLine,playerNo);
+					}
+				}
+			} catch(IOException e) {//そのほかのエラー
+				e.printStackTrace();
+				System.err.println(player[playerNo] + "との接続でエラーが発生しました");
+				printStatus(); //接続状態を出力する
+			} catch(Exception e) {
+				e.printStackTrace();
+				System.err.println(player[playerNo] + "との接続でエラーが発生しました");
+				printStatus(); //接続状態を出力する
+				playerShut(playerNo);
+			}
 
         }
 
         public boolean receiveMessage(String msg, int playerNo) {
-        	//try {
-        		System.out.println("receive: " + "from:" + player[playerNo] + "   " + msg);
-        		int f = 0;
-        		//新規登録
-        		if(msg.contains("Registration:")) {
-        			online[playerNo] = 0;
-        			f = 1;
-        			String[] s = msg.split(":");
-        			receivePlayersInfo(s[1],playerNo,f);
-        			f = 0;
-        			//return true;
-        		}
+			System.out.println("receive: " + "from:" + player[playerNo] + "   " + msg);
+			int f = 0;
+			//新規登録
+			if(msg.contains("Registration:")) {
+				online[playerNo] = 0;
+				f = 1;
+				String[] s = msg.split(":");
+				receivePlayersInfo(s[1],playerNo,f);
+				f = 0;
+			}
 
-    	    	 //ログイン
-        		else if(msg.contains("Login:")) {
-    	    		 online[playerNo] = 0;
-    	    		 f = 2;
-    	    		 String[] s = msg.split(":");
-    	    		 receivePlayersInfo(s[1],playerNo,f);
-    	    		 f = 0;
-    	    		 //return true;
-    	    	 }
+				//ログイン
+			else if(msg.contains("Login:")) {
+					online[playerNo] = 0;
+					f = 2;
+					String[] s = msg.split(":");
+					receivePlayersInfo(s[1],playerNo,f);
+					f = 0;
+					//return true;
+				}
 
-        		//Mypage
-        		else if(msg.contains("Mypage:")) {
-        			if(msg.contains("matching")) {
-    	    			online[playerNo] = 2;//マッチング状態に変換
-    	    			date[playerNo] = new Date();//日付を取得
-    	    			getMatchingInfo(playerNo);//敵の情報を送信
-    	    			//return true;
-        			} else if(msg.contains("logout")) {
-        				playerShut(playerNo);
-        				//shut.alive = false;
-        				shut.interrupt();
-        			}
-        			return false;
-        		}
+			//Mypage
+			else if(msg.contains("Mypage:")) {
+				if(msg.contains("matching")) {
+					online[playerNo] = 2;//マッチング状態に変換
+					date[playerNo] = new Date();//日付を取得
+					getMatchingInfo(playerNo);//敵の情報を送信
+					//return true;
+				} else if(msg.contains("logout")) {
+					playerShut(playerNo);
+					//shut.alive = false;
+					shut.interrupt();
+				}
+				return false;
+			}
 
-    	    	 //マッチング
-        		else if(msg.contains("Matching:")) {
-    	    		 //online[playerNo] = 2;//マッチング状態に変換
-    	    		 if(msg.contains("update")) {//マッチング情報のアップデートをリクエストしているならば
-    	    			 getMatchingInfo(playerNo);
-    	    		 } else if(msg.contains("exit")) {//マイページに戻る
-    	    			 online[playerNo]--;//マイページに戻る
-    	    			 forwardMessage("Login:success:" + makeSentence(playerNo),playerNo);
-    	    		 } else {//他プレイヤの名前が送られてきたら
-    	    			 //String[] s = msg.split(":");
-    	    			 setGame(msg,playerNo);//マッチング周り
-    	    		 }
-    	    		 //return true;
-        		}
+				//マッチング
+			else if(msg.contains("Matching:")) {
+					if(msg.contains("update")) {//マッチング情報のアップデートをリクエストしているならば
+						getMatchingInfo(playerNo);
+					} else if(msg.contains("exit")) {//マイページに戻る
+						online[playerNo]--;//マイページに戻る
+						forwardMessage("Login:success:" + makeSentence(playerNo),playerNo);
+					} else {//他プレイヤの名前が送られてきたら
+						setGame(msg,playerNo);//マッチング周り
+					}
+			}
 
-    	    	//対局
-        		else if(msg.contains("Game:")) {
-        			online[playerNo] = 3;
-        			game(playerNo,msg);
-        			//return true;
-        		}
+			//対局
+			else if(msg.contains("Game:")) {
+				online[playerNo] = 3;
+				game(playerNo,msg);
+			}
 
-        		//対局終了
-        		else if(msg.contains("GameFinish:")) {
-        			String s[] = msg.split(":");
+			//対局終了
+			else if(msg.contains("GameFinish:")) {
+				String s[] = msg.split(":");
 
-        			String s2[] = s[1].split(",");
-        			if(s2.length > 2) {//対局結果が送られてきたならば
-        				int result = Integer.parseInt(s2[2]);//対戦結果
-        				int experience = Integer.parseInt(s2[3]);//更新済みの経験値
-        				rewrite(result,experience,playerNo);//対局結果の更新
-        					//試し用
-           					//forwardMessage("GameFinish:" + player[match[playerNo]] + "," + player[playerNo] + ",4,3",match[playerNo]);//ためし
-        					//online[playerNo] = 4;//対局終了画面
-        					//したの命令は後でもとに戻す
-        					int n = match[playerNo][0];
-        					if(match[n][1] == 1) {//相手がすでに処理を終了しているならば
-        						match[n][0] = 0;
-        						match[playerNo][0] = 0;//対戦中の配列から外す
-        					} else {//相手がまだ更新していないならば
-        						match[playerNo][1] = 1;
-        					}
+				String s2[] = s[1].split(",");
+				if(s2.length > 2) {//対局結果が送られてきたならば
+					int result = Integer.parseInt(s2[2]);//対戦結果
+					int experience = Integer.parseInt(s2[3]);//更新済みの経験値
+					rewrite(result,experience,playerNo);//対局結果の更新
+					int n = match[playerNo][0];
+					if(match[n][1] == 1) {//相手がすでに処理を終了しているならば
+						match[n][0] = 0;
+						match[playerNo][0] = 0;//対戦中の配列から外す
+					} else {//相手がまだ更新していないならば
+						match[playerNo][1] = 1;
+					}
 
-        					if(!shutF) {
+					if(!shutF) {
 
-        						online[n] = 0;//初期状態に戻す
-        		            	String s1 = player[n];
-        		            	playerNoMap.remove(s1);//プレイヤ名とプレイヤNoの関係を切る
-        		            	player[n] = null;//プレイヤ名とプレイヤNoの関係を切る
-        					}
-
-
-        			} else if(msg.contains("mypage")){
-        				online[playerNo] = 1;
-        				forwardMessage("Login:success:" + makeSentence(playerNo),playerNo);//もう一度プレイヤの情報を送信
-        			}
-        			//return true;
-        		} else if(msg.contains("pong")) {//接続が絶たれていない場合には
-        			shut.interrupt();
-        		}
-        		return true;
+						online[n] = 0;//初期状態に戻す
+						String s1 = player[n];
+						playerNoMap.remove(s1);//プレイヤ名とプレイヤNoの関係を切る
+						player[n] = null;//プレイヤ名とプレイヤNoの関係を切る
+					}
+				} else if(msg.contains("mypage")){
+					online[playerNo] = 1;
+					forwardMessage("Login:success:" + makeSentence(playerNo),playerNo);//もう一度プレイヤの情報を送信
+				}
+			} else if(msg.contains("pong")) {//接続が絶たれていない場合には
+				shut.interrupt();
+			}
+			return true;
         }
 
         //メッセージの送信 playerNoは送信相手
         public void forwardMessage(String msg, int playerNo){ //メッセージの転送
-        	//try {
-        		out[playerNo].println(msg);
-        		out[playerNo].flush();
-        		System.out.println("send: to:" + player[playerNo] + "   " + msg);
-        	/*} catch(Exception e) {
-        		e.printStackTrace();
-        		System.err.println("メッセージの送信に失敗しました");
-        	}*/
+			out[playerNo].println(msg);
+			out[playerNo].flush();
+			System.out.println("send: to:" + player[playerNo] + "   " + msg);
         }
 
 
@@ -313,41 +265,34 @@ public class Server{
         public void receivePlayersInfo(String str, int playerNo, int f) {
             String s[];
             s = str.split(",");
-           // try {
-                if(f == 1) {//新規登録ならば
-                	if(s.length < 3) {
-                		forwardMessage("Registration:blank",playerNo);
-                	} else {
-                		register(s[0],s[1],s[2],playerNo);
-                    }
-                } else {//ログインならば
-                	if(s.length < 2) {
-                		forwardMessage("Login:blank",playerNo);
-                	} else {
-                		login(s[0],s[1],playerNo);
-                	}
-                }
-           /* } catch(Exception e) {//ここの文字列確認
-                //forwardMessage("false",playerNo);
-            	e.printStackTrace();
-            }*/
+           if(f == 1) {//新規登録ならば
+				if(s.length < 3) {
+					forwardMessage("Registration:blank",playerNo);
+				} else {
+					register(s[0],s[1],s[2],playerNo);
+				}
+			} else {//ログインならば
+				if(s.length < 2) {
+					forwardMessage("Login:blank",playerNo);
+				} else {
+					login(s[0],s[1],playerNo);
+				}
+			}
         }
 
         //新規登録
         public void register(String name, String pass1, String pass2, int playerNo) {
-
             if(passwordCheck(pass1,pass2)) {
                 if(accountMap.get(name) != null) {//プレイヤ名が被っている場合
                 	forwardMessage("Registration:alreadyExists",playerNo);
                 } else if(name.length() >= 9) {
                 	forwardMessage("Registration:tooLong",playerNo);
-
                 } else {//新規登録
                     accountMap.put(name, pass1);//プレイヤ名とパスワードをマップに保存
-                    writeFile("\n" + name + "," + pass1, "account.txt");//ファイルへの書き込み
+                    writeFile("\n" + name + "," + pass1, "../users//account.txt");//ファイルへの書き込み
                     forwardMessage("Registration:success",playerNo);
                     try {
-                    	File file = new File(name+".txt");
+                    	File file = new File(".//users/user/"+name+".txt");
                     	if(!file.exists()){
                     		file.createNewFile();
                     	}
@@ -358,7 +303,7 @@ public class Server{
                     PlayerInfo newp = new PlayerInfo(name);
                     playerInfo.add(newp);
                     infoMap.put(name, newp);
-                    writeFile("\n" + newp.writeFile(),"playerInfo.txt");//ファイルへの書き込み
+                    writeFile("\n" + newp.writeFile(),"../users/playerInfo.txt");//ファイルへの書き込み
                 }
             } else {//確認用アドレスが一致しない場合
                 forwardMessage("Registration:notMatch",playerNo);
@@ -460,7 +405,6 @@ public class Server{
     	        	String[] s2 = s1[2].split(",");//名前を取り出す
     	        		try {
     	        		num = playerNoMap.get(s2[0]);//プレイヤ名からプレイヤナンバーを取得
-
 
     	        		if(online[num] == 2) {//申請相手がマッチング中ならば
     	        			forwardMessage("Matching:" + s1[1] + ":" + s2[0], playerNo);//送信者にも情報を送信
@@ -642,7 +586,7 @@ public class Server{
     //ファイルへの書き込み
     public void writeAll() {
         try {
-            FileWriter fr = new FileWriter("playerInfo.txt");
+            FileWriter fr = new FileWriter("../users/playerInfo.txt");
             BufferedWriter bw = new BufferedWriter(fr);
             PrintWriter pw = new PrintWriter(bw);
             pw.print(playerInfo.get(0).writeFile());//ファイルへ追記
@@ -660,7 +604,7 @@ public class Server{
     //プレイヤのアカウント情報のファイルからの取得
     public void getPlayersAccount() {
         try {
-            FileReader fr = new FileReader("Account.txt");//Account.txt
+            FileReader fr = new FileReader("../users//Account.txt");//Account.txt
             BufferedReader br = new BufferedReader(fr);
             String str;
             while((str = br.readLine()) != null) {
@@ -682,7 +626,7 @@ public class Server{
     //ファイルからのプレイヤ情報の取り出し
     public void setPlayersInfo() {
         try {
-            FileReader fr = new FileReader("playerinfo.txt");
+            FileReader fr = new FileReader("../users/playerinfo.txt");
             BufferedReader br = new BufferedReader(fr);
             String str;
 
@@ -697,32 +641,13 @@ public class Server{
                 	playerInfo.add(newp);
                 	infoMap.put(s[0],newp);//名前とクラスのマップに追加
                 }
-                //newp = null;
-            }
-            //System.out.println(playerInfo);
-
-            /*for(String key: infoMap.keySet()) {
-                PlayerInfo p = infoMap.get(key);
-                System.out.println(p.toString());
-            }*/
+			}
             br.close();
         }catch(IOException ioe) {
             ioe.printStackTrace();
             System.err.println("ファイルからのプレイヤ情報の取り出しに失敗しました");
         }
     }
-
-    //切断した場合の記録の更新
-   /* public void rewrite(int result, int playerNo) {
-    	//try {
-    		int opponum = match[playerNo];//対戦相手のプレイヤNO
-    		PlayerInfo info = infoMap.get(player[playerNo]);//本人のプレイヤ情報
-    		//PlayerInfo oppoinfo = infoMap.get(player[opponum]);//相手のプレイヤ情報
-    		info.addshut();
-//    	} catch(NullPointerException e) {
-
-  //  	}
-    }*/
 
     //試合結果の反映
     public synchronized void rewrite(int result,int experience, int playerNo) {
@@ -746,164 +671,19 @@ public class Server{
 	        } else if(result == 4) {//投了数を更新
 	        	info.addgiveup();
 	        	info.updataEx(experience);
-	        } /*else if(result == 5){//切断
-	        	info.addshut();//切断数を更新
-	        }*/
-	      /*  while(bl == true) {
-	            try {
-	                wait();
-	            } catch(InterruptedException e) {}
-	        }*/
+	        }
 
 	        makeHistory(info.getName(),oppoinfo.getName(),result);
 	        writeAll();
     	}
-	            /*if(str.equals("win")) {//勝ちならば
-	                writeFile("\n" + info.getName() + "," + oppoinfo.getName(), "History.txt"); 直す前
-
-	            } else if(str.equals("lose")) {
-
-	                writeFile("\n" + oppoinfo.getName() + "," + info.getName(), "History.txt");
-	            }*/
-
-	        //bl = true;
-	        //notifyAll();
 
     }
 
-    //プレイヤの接続が切れた場合に行うこと
-
-    //試し
-    /*public String getHistory3(int playerNo) {
-    	int count = 0;
-    	String str = "";
-    	try {
-    		String playername = player[playerNo];
-    		File file = new File(playername+".txt");
-    		BufferedReader br = new BufferedReader(new FileReader(file));
-    		Stack<String> lines = new Stack<String>();
-    		String line = br.readLine();
-    		while(line != null) {
-    			lines.push(line);
-    			line = br.readLine();
-    		}
-
-    		while(!lines.empty() && count < 5) {
-    			str += lines.pop();
-    		}
-    	}catch(Exception e) {
-
-    	}
-    }*/
-    //5行取り出す
-    /*public String getHistory(int playerNo) {
-
-    	String playname=player[playerNo];
-    	File file=new File(playname+".txt");
-    	List<String> result = new ArrayList<String>();
-    	long count = 0;
-    	String str=null;
-    	if (!file.exists() || file.isDirectory() || !file.canRead())//読み取り失敗の場合
-    		return null;
-    	RandomAccessFile fileRead = null;
-    	try {
-    		fileRead = new RandomAccessFile(file, "r");
-    		long length = fileRead.length();
-    		if (length == 0L) { //履歴はないなら、直接にreturn
-    			return ",";
-    		} else {
-    			long pos = length - 1;
-    			while (pos > 0) {
-    				pos--;
-    				fileRead.seek(pos);
-    				if (fileRead.readByte() == '\n') {
-    					String line = fileRead.readLine();
-    					result.add(line);
-    					System.out.println(line);
-    					count++;
-    					if (count == 5L)
-    						break;
-    				}
-    			}
-    			if (pos == 0) {
-    				fileRead.seek(0);
-    				result.add(fileRead.readLine());
-    			}
-    			str=result.get(0);
-    			System.out.println(length);
-    			if(length< 5L){
-    				for(long i=1;i<length;i++){
-    					int s=(int)i;
-    					str +=","+result.get(s);
-    				}
-    			}else{
-    				for(long i=1;i<5L;i++){
-    					int s=(int)i;
-    					str +=","+result.get(s);
-    				}
-    			}
-    		}
-     }
-     catch (IOException e)
-     {
-         e.printStackTrace();
-     }
-     finally
-     {
-         if (fileRead != null)
-         {
-             try
-             {
-                 fileRead.close();
-             }
-             catch (Exception e)
-             {
-             }
-         }
-     }
-     return  str;
- }*/
-   /* public String getHistory(int playerNo) {
-    	String playname=player[playerNo];
-        Map<Integer,String> dataMap = new HashMap<Integer,String>();
-        FileReader file2;
-        int num = 0;
-        String str=",";
-        try {
-            file2 = new FileReader(playname+".txt");
-            BufferedReader in = new BufferedReader(file2);
-            while (in.ready()) {
-                dataMap.put((num % 5), in.readLine());
-                num++;
-            }
-            in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (num < 5) {
-            for (int i = 0; i < num; ++i) {
-                str+=dataMap.get(i)+",";
-            }
-        } else {
-            int key = num % 5;
-            for (int i = key; i < 5; ++i) {
-                str+=dataMap.get(i)+",";
-            }
-            for (int i = 0; i < key; ++i) {
-                str+=dataMap.get(i)+",";
-            }
-        }
-
-        return str;
-    }*/
     //ファイルからプレイヤの対戦履歴を取り出す(全試合出力)
      public String getHistory(int playerNo) {
     	try {
 	        String playname=player[playerNo];
-	        File file=new File(playname+".txt");
+	        File file=new File("../users/user/"+playname+".txt");
 	        InputStreamReader reader=new InputStreamReader(new FileInputStream(file));
 	        BufferedReader br=new BufferedReader(reader);
 	        String line="";
@@ -924,7 +704,7 @@ public class Server{
     //ユーザーごとに各対戦相手との対局情報(プレイヤー名、相手、対局情報)  (1つのプレイヤーに対して１つのファイル)
     public void makeHistory(String playername,String oppo,int result) {
     	try {
-	        File file = new File(playername+".txt");
+	        File file = new File("../users/user/"+playername+".txt");
 	        if(!file.exists()){
 	            file.createNewFile();
 	        }
@@ -945,18 +725,12 @@ public class Server{
 
 
     public static void main(String[] args){ //main
-    	//try {
-    		//int port = Integer.parseInt(args[0]);
+		Server server = new Server(10000);
+		server.getPlayersAccount();
+		server.setPlayersInfo();
+		server.sta.start();
+		server.acceptClient();
 
-    		//Server server = new Server(port);
-    		Server server = new Server(10000);
-    		server.getPlayersAccount();
-    		server.setPlayersInfo();
-    		server.sta.start();
-    		server.acceptClient();
-    	/*} catch(Exception e) {
-    		e.printStackTrace();
-    	}*/
     }
 }
 

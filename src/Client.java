@@ -1,4 +1,4 @@
-﻿
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -82,20 +82,20 @@ public class Client extends JFrame implements ActionListener{
 		border = new EtchedBorder(EtchedBorder.RAISED, Color.white, Color.black);
 
 		//アイコン
-		whiteIcon = new ImageIcon("White.jpg");
-		blackIcon = new ImageIcon("Black.jpg");
-		boardIcon = new ImageIcon("GrreenFrame.jpg");
+		whiteIcon = new ImageIcon("../pic/White.jpg");
+		blackIcon = new ImageIcon("../pic/Black.jpg");
+		boardIcon = new ImageIcon("../pic/GrreenFrame.jpg");
 
 		//背景
 		try {
-	        backG1 = new JLabel(new ImageIcon(ImageIO.read(new File("back1.jpg"))));
+	        backG1 = new JLabel(new ImageIcon(ImageIO.read(new File("../pic/back1.jpg"))));
 	        backG1.setBounds(0, 0, WINDOW_X, WINDOW_Y);
 		}
         catch (IOException e) {
         	e.printStackTrace();
         }
         try {
-	        backG2 = new JLabel(new ImageIcon(ImageIO.read(new File("back2.jpg"))));
+	        backG2 = new JLabel(new ImageIcon(ImageIO.read(new File("../pic/back2.jpg"))));
 	        backG2.setBounds(0, 0, WINDOW_X, WINDOW_Y);
 		}
         catch (IOException e) {
@@ -337,7 +337,8 @@ public class Client extends JFrame implements ActionListener{
 			else if(msg.contains("success")) {
 				winFlag = 10;
 				String[] data = msg.split(":");
-				userInfo = data[2];
+				userInfo = data[2].replaceAll("null", "");
+				System.out.println(userInfo);
 				myUser = new Player(userInfo);
 			}
 		}

@@ -1,16 +1,16 @@
 /*
- * ƒIƒZƒƒvƒƒOƒ‰ƒ€
+ * ã‚ªã‚»ãƒ­ãƒ—ãƒ­ã‚°ãƒ©ãƒ 
  */
 
 public class Othello {
-	//•Ï”
+	//å¤‰æ•°
 	public static final int N = 0;
 	public static final int B = 1;
 	public static final int W = 2;
 	public static final int S = 3;
-	private int row = 8; //ƒIƒZƒ”Õ‚Ìc‰¡ƒ}ƒX”
-	private int size = 10; //§Œä—p‚Ìc‰¡ƒ}ƒX”
-	private boolean turn; //è”ÔF•trueC”’false
+	private int row = 8; //ã‚ªã‚»ãƒ­ç›¤ã®ç¸¦æ¨ªãƒã‚¹æ•°
+	private int size = 10; //åˆ¶å¾¡ç”¨ã®ç¸¦æ¨ªãƒã‚¹æ•°
+	private boolean turn; //æ‰‹ç•ªï¼šé»’trueï¼Œç™½false
 	private int[] grids ={
 		S,S,S,S,S,S,S,S,S,S,
 		S,N,N,N,N,N,N,N,N,S,
@@ -22,50 +22,50 @@ public class Othello {
 		S,N,N,N,N,N,N,N,N,S,
 		S,N,N,N,N,N,N,N,N,S,
 		S,S,S,S,S,S,S,S,S,S
-	}; //‹Ç–Êî•ñ
+	}; //å±€é¢æƒ…å ±
 	boolean putFlag = true;
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	public Othello(){
-		turn = true; //•‚ªæè
+		turn = true; //é»’ãŒå…ˆæ‰‹
 	}
 
-	//ƒ}ƒX”‚ğæ“¾
+	//ãƒã‚¹æ•°ã‚’å–å¾—
 	public int getRow(){
 		return row;
 	}
 
-	//§Œä—p‚Ìƒ}ƒX”‚ğæ“¾
+	//åˆ¶å¾¡ç”¨ã®ãƒã‚¹æ•°ã‚’å–å¾—
 	public int getSize(){
 		return size;
 	}
 
-	//1ŸŒ³À•W‚©‚çxÀ•W‚ğæ“¾
+	//1æ¬¡å…ƒåº§æ¨™ã‹ã‚‰xåº§æ¨™ã‚’å–å¾—
 	public int changeX(int i) {
 		return i % size;
 	}
 
-	//1ŸŒ³À•W‚©‚çyÀ•W‚ğæ“¾
+	//1æ¬¡å…ƒåº§æ¨™ã‹ã‚‰yåº§æ¨™ã‚’å–å¾—
 	public int changeY(int i) {
 		return (int)(i/10);
 	}
 
-	//2ŸŒ³‚©‚ç1ŸŒ³‚Ö‚ÌÀ•W•ÏŠ·
+	//2æ¬¡å…ƒã‹ã‚‰1æ¬¡å…ƒã¸ã®åº§æ¨™å¤‰æ›
 	public int changeDemension(int x, int y){
 		return x + y * 10;
 	}
 
-	//ƒ^[ƒ“‚ğæ“¾
+	//ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 	public boolean getTurn(){
 		return turn;
 	}
 
-	//ƒ^[ƒ“‚ğ•ÏX
+	//ã‚¿ãƒ¼ãƒ³ã‚’å¤‰æ›´
 	public void changeTurn(){
 		turn = !turn;
 	}
 
-	//ƒ^[ƒ“‚©‚çF‚ğæ“¾
+	//ã‚¿ãƒ¼ãƒ³ã‹ã‚‰è‰²ã‚’å–å¾—
 	public int getColor(boolean turn) {
 		if(turn) {
 			return B;
@@ -75,25 +75,25 @@ public class Othello {
 		}
 	}
 
-	//‹Ç–Êî•ñ‚ğæ“¾
+	//å±€é¢æƒ…å ±ã‚’å–å¾—
 	public int[] getGrids(){
 		return grids;
 	}
 
-	//w’è‚³‚ê‚½2ŸŒ³À•W‚Ì‹Ç–Êî•ñ‚ğæ“¾
+	//æŒ‡å®šã•ã‚ŒãŸ2æ¬¡å…ƒåº§æ¨™ã®å±€é¢æƒ…å ±ã‚’å–å¾—
 	public int getGridsState(int i, int j){
 		return grids[changeDemension(i, j)];
 	}
 
-	//w’è‚³‚ê‚½1ŸŒ³À•W‚ÉÎ‚ğ’u‚­
+	//æŒ‡å®šã•ã‚ŒãŸ1æ¬¡å…ƒåº§æ¨™ã«çŸ³ã‚’ç½®ã
 	public void putStone(boolean turn, int i){
 		int x,y;
 
-		//1ŸŒ³¨2ŸŒ³‚Ö
+		//1æ¬¡å…ƒâ†’2æ¬¡å…ƒã¸
 		x = changeX(i);
 		y = changeY(i);
 
-		//‡–@‚È‚ç
+		//åˆæ³•ãªã‚‰
 		if(isLegal(x, y)){
 			putFlag = true;
 			if(turn){
@@ -111,20 +111,20 @@ public class Othello {
 		}
 	}
 
-	//Î‚ª‚¨‚¯‚é‚©”»’f
+	//çŸ³ãŒãŠã‘ã‚‹ã‹åˆ¤æ–­
 	public boolean isLegal(int i, int j) {
 		int dirx, diry, dir;
-		int cpos, dpos; //cpos:©•ªCdpos:—£‚ê‚½ˆÊ’u
-		int ccolor, ocolor; //ccolor:©•ª‚ÌFCocolor:‘Šè‚ÌF
+		int cpos, dpos; //cpos:è‡ªåˆ†ï¼Œdpos:é›¢ã‚ŒãŸä½ç½®
+		int ccolor, ocolor; //ccolor:è‡ªåˆ†ã®è‰²ï¼Œocolor:ç›¸æ‰‹ã®è‰²
 
-		//©•ª‚ÌÀ•W‚ğæ“¾
+		//è‡ªåˆ†ã®åº§æ¨™ã‚’å–å¾—
 		cpos = changeDemension(i, j);
 
-		//Fæ“¾
+		//è‰²å–å¾—
 		ccolor = getColor(getTurn());
 		ocolor = getColor(!getTurn());
 
-		//‘¼‚ÌÎC”Ô•º‚¾‚Á‚½ê‡false
+		//ä»–ã®çŸ³ï¼Œç•ªå…µã ã£ãŸå ´åˆfalse
 		if(grids[cpos] != N) {
 			return false;
 		}
@@ -133,10 +133,10 @@ public class Othello {
 			for(diry = (-size); diry <= size; diry += size) {
 				dir = dirx + diry;
 
-				//©•ª‚È‚ç
+				//è‡ªåˆ†ãªã‚‰
 				if(dir == 0) { continue;}
 
-				//—£‚ê‚½ˆÊ’u‚ğZo
+				//é›¢ã‚ŒãŸä½ç½®ã‚’ç®—å‡º
 				dpos = cpos + dir;
 
 				while(grids[dpos] == ocolor) {
@@ -149,35 +149,35 @@ public class Othello {
 		return false;
 	}
 
-	//Î‚ğ”½“]
+	//çŸ³ã‚’åè»¢
 	public void invertStone(int i, int j){
 		int dirx, diry, dir;
-		int cpos, dpos; //cpos:©•ªCdpos:—£‚ê‚½ˆÊ’u
-		int ccolor, ocolor; //ccolor:©•ª‚ÌFCocolor:‘Šè‚ÌF
+		int cpos, dpos; //cpos:è‡ªåˆ†ï¼Œdpos:é›¢ã‚ŒãŸä½ç½®
+		int ccolor, ocolor; //ccolor:è‡ªåˆ†ã®è‰²ï¼Œocolor:ç›¸æ‰‹ã®è‰²
 
-		//©•ª‚ÌÀ•W‚ğæ“¾
+		//è‡ªåˆ†ã®åº§æ¨™ã‚’å–å¾—
 		cpos = changeDemension(i, j);
 
-		//Fæ“¾
+		//è‰²å–å¾—
 		ccolor = getColor(getTurn());
 		ocolor = getColor(!getTurn());
 
-		//©•ª‚ğ”½“]
+		//è‡ªåˆ†ã‚’åè»¢
 		grids[cpos] = ccolor;
 
-		//©•ªˆÈŠO‚ğ”½“]
+		//è‡ªåˆ†ä»¥å¤–ã‚’åè»¢
 		for(dirx = -1; dirx <= 1; dirx++) {
 			for(diry = (-size); diry <= size; diry += size) {
-				//—×‚ÌÀ•W‚Ö‚Ì‹——£
+				//éš£ã®åº§æ¨™ã¸ã®è·é›¢
 				dir = dirx + diry;
 
-				//©•ª‚È‚ç
+				//è‡ªåˆ†ãªã‚‰
 				if(dir == 0) { continue;}
 
-				//—£‚ê‚½ˆÊ’u‚ğZo
+				//é›¢ã‚ŒãŸä½ç½®ã‚’ç®—å‡º
 				dpos = cpos + dir;
 
-				//—×‚ªˆá‚¤F‚È‚ç
+				//éš£ãŒé•ã†è‰²ãªã‚‰
 				if(grids[dpos] == ocolor) {
 					do{
 						dpos += dir;
@@ -194,7 +194,7 @@ public class Othello {
 		}
 	}
 
-	//’u‚¯‚é‚Æ‚±‚ë‚ª‚ ‚é‚©”»’f
+	//ç½®ã‘ã‚‹ã¨ã“ã‚ãŒã‚ã‚‹ã‹åˆ¤æ–­
 	public boolean isPutPossibility(){
 		for(int i = 1; i <= row; i++) {
 			for(int j = 1; j <= row; j++) {
@@ -207,12 +207,12 @@ public class Othello {
 		return false;
 	}
 
-	//Î‚Ì”‚ğæ“¾
+	//çŸ³ã®æ•°ã‚’å–å¾—
 	public int getStoneNum(boolean turn) {
 		int sum = 0;
 		int color;
 
-		//F‚ğæ“¾
+		//è‰²ã‚’å–å¾—
 		color = getColor(turn);
 
 		for(int i= 0; i <= row; i++) {
@@ -226,7 +226,7 @@ public class Othello {
 		return sum;
 	}
 
-	//‘Î‹ÇI—¹‚ğ”»’f
+	//å¯¾å±€çµ‚äº†ã‚’åˆ¤æ–­
 	public boolean isFinishGame() {
 		int sumB = getStoneNum(true);
 		int sumW = getStoneNum(false);
@@ -239,12 +239,12 @@ public class Othello {
 		}
 	}
 
-	//Ÿ”s‚ğ”»’f
+	//å‹æ•—ã‚’åˆ¤æ–­
 	public int judgeWinner() {
 		int sumB = getStoneNum(true);
 		int sumW = getStoneNum(false);
 
-		System.out.println("•F" + sumB + "”’F" + sumW);
+		System.out.println("é»’ï¼š" + sumB + "ç™½ï¼š" + sumW);
 
 		if(sumB > sumW) {
 			return B;
