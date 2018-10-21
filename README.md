@@ -7,7 +7,7 @@ It is developed as part of the university lesson.
 
 ## Usage
 ```
-cd src
+cd bin
 java Server
 ```
 exe/othello.exeを実行
